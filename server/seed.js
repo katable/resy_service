@@ -1,11 +1,30 @@
 const mysql = require('mysql');
 const Promise = require('bluebird');
+const _ = require('underscore');
 const database = 'resy_db';
 
+const partyTypes = {
+  all: _.range(1, 21),
+  small: _.range(1, 7),
+  large: _.range(15, 21),
+  scattered: [1, 10, 20],
+};
 
+// 2018-07-01 00:00:00 to 2020-06-30 23:30:00 in 30-min increments
+// values in milliseconds from 1970-01-01 00:00:00
+const firstDateTime = (2018 - 1970) * 365.25 * 24 * 60 * 60 * 1000
+                      - 184 * 24 * 60 * 60 * 1000;
+const lastDateTime = (2020-1970)*365.25*24*60*60*1000
+                     + 182 * 24 * 60 * 60 * 1000
+                     - 30 * 60 * 1000;
+const increment30Mins = 30 * 60 * 1000;
 
+const dateTypes = {
+  all: _.range(firstDateTime, lastDateTime, increment30Mins),
+};
 
-
+dateTypes.most = dateTypes.all.filter((dt) => !([1, 3].includes(dt.getDay())));
+dateTypes.few = dateTypes.all.filter((dt) => [1, 3].includes(dt.getDay()));
 
 
 const conn = mysql.createConnection({
