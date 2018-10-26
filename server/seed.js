@@ -19,12 +19,23 @@ const lastDateTime = (2020-1970)*365.25*24*60*60*1000
                      - 30 * 60 * 1000;
 const increment30Mins = 30 * 60 * 1000;
 
-const dateTypes = {
+const dateTimeTypes = {
   all: _.range(firstDateTime, lastDateTime, increment30Mins),
 };
 
-dateTypes.most = dateTypes.all.filter((dt) => !([1, 3].includes(dt.getDay())));
-dateTypes.few = dateTypes.all.filter((dt) => [1, 3].includes(dt.getDay()));
+dateTimeTypes.most = dateTimeTypes.all.filter(
+  (dt) => !([1, 3].includes(dt.getDay()))
+);
+dateTimeTypes.few = dateTimeTypes.all.filter(
+  (dt) => [1, 3].includes(dt.getDay() && dt.getDate() < 10 && dt.getDate() > 20)
+);
+
+const quantityTypes = {
+  normal: [4, 5, 6],
+  limited: [1, 2],
+  scattered: [1, 5, 10],
+}
+
 
 
 const conn = mysql.createConnection({
