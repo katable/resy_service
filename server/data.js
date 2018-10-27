@@ -101,7 +101,5 @@ _.range(1, inventoryData.length + 1, 10).forEach((invId) => {
   reservationsData.push([123, invId, format(bookedAt)]);
 });
 
-console.log(inventoryData.length);
-
 exports.inventoryData = inventoryData;
 exports.reservationsData = reservationsData;

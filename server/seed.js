@@ -1,10 +1,11 @@
 const mysql = require('mysql');
 const Promise = require('bluebird');
 const data = require('./data');
+const config = require('./config');
 
 const conn = mysql.createConnection({
-  user: 'student',
-  password: 'student',
+  user: config.USER,
+  password: config.PASSWORD,
 });
 
 const db = Promise.promisifyAll(conn, { multiArgs: true });
