@@ -1,60 +1,84 @@
 const _ = require('underscore');
 
+// 'YYYY-MM-DD HH:mm:ss' for MySQL insertion (extra quotes yes, 0 padding not needed)
+const format = (dateTime) => {
+  const y = dateTime.getFullYear();
+  const mon = dateTime.getMonth() + 1;
+  const d = dateTime.getDate();
+  const h = dateTime.getHours();
+  const min = dateTime.getMinutes();
+  const s = dateTime.getSeconds();
+  return `"${y}-${mon}-${d} ${h}:${min}:${s}"`;
+};
+
 /*
  *  Generate data for the "inventory" table
  */
 
 const partyTypes = {
-  all: _.range(1, 21),
-  small: _.range(1, 7),
-  large: _.range(15, 21),
-  scattered: [1, 10, 20],
+  // all: _.range(1, 21),
+  small: _.range(1, 3),
+  large: _.range(19, 21),
+  scattered: [1, 10],
 };
 
-// 2018-07-01 00:00:00 to 2020-06-30 23:30:00 in 30-min increments
+// 2019-12-01 00:00:00 to 2020-03-31 23:30:00 in 30-min increments
 // values in milliseconds from 1970-01-01 00:00:00
-const firstDateTime = (2018 - 1970) * 365.25 * 24 * 60 * 60 * 1000
-                      - 184 * 24 * 60 * 60 * 1000;
+const firstDateTime = (2020 - 1970) * 365.25 * 24 * 60 * 60 * 1000
+                      - 31.5 * 24 * 60 * 60 * 1000;
 const lastDateTime = (2020 - 1970) * 365.25 * 24 * 60 * 60 * 1000
-                     + 182 * 24 * 60 * 60 * 1000
+                     + 90.5 * 24 * 60 * 60 * 1000
                      - 30 * 60 * 1000;
 const increment30Mins = 30 * 60 * 1000;
 
+const allTimeSlots = _.range(firstDateTime, lastDateTime, increment30Mins)
+  .map(millisec => new Date(millisec));
+
 const dateTimeTypes = {
-  all: _.range(firstDateTime, lastDateTime, increment30Mins),
-  most: null,
-  few: null,
+  most: allTimeSlots.filter(dt =>
+    [5, 6].includes(dt.getDay()) &&
+    ((dt.getHours() >= 20 && dt.getHours() <= 22) ||
+     (dt.getHours() >= 11 && dt.getHours() <= 13))
+  ),
+  few: allTimeSlots.filter(dt =>
+    [1, 3].includes(dt.getDay()) &&
+    (dt.getDate() < 5 || dt.getDate() > 26) &&
+    dt.getHours() >= 18 && dt.getHours() <= 19
+  ),
 };
-
-dateTimeTypes.most = dateTimeTypes.all.filter((dt) => {
-  return !([1, 3].includes(dt.getDay()));
-});
-
-dateTimeTypes.few = dateTimeTypes.all.filter((dt) => {
-  return [1, 3].includes(dt.getDay())
-    && dt.getDate() < 10 && dt.getDate() > 20
-    && dt.getHours() >= 18 && dt.getHours() <= 19;
-});
 
 const quantityTypes = {
-  normal: [4, 5, 6],
+  normal: [4, 5],
   limited: [1, 2],
-  scattered: [1, 5, 10],
+  scattered: [1, 10],
 };
 
-const restaurantNum = _.size(partyTypes) * _.size(dateTimeTypes) * _.size(quantityTypes);
+const seatingTypes = {
+  standard: 'NULL',
+  bar: 1,
+  counter: 2,
+};
+
+const pointsTypes = {
+  standard: 'NULL',
+  extra: 1000,
+};
 
 // [id] restaurant_id, party, avail_at, special_seating, points, quantity
 const inventoryData = [];
 
-_.range(1, restaurantNum + 1).forEach((rest_id) => {
-  Object.values(partyTypes).forEach((partyRange) => {
-    partyRange.forEach((party) => {
-      Object.values(dateTimeTypes).forEach((dateTimeRange) => {
-        dateTimeRange.forEach((dateTime) => {
-          Object.values(quantityTypes).forEach((quantityRange) => {
-            quantityRange.forEach((quantity) => {
-              inventoryData.push([rest_id, party, dateTime, null, null, quantity]);
+let restId = 0;
+Object.values(partyTypes).forEach((partyRange) => {
+  Object.values(dateTimeTypes).forEach((dateTimeRange) => {
+    Object.values(quantityTypes).forEach((quantityRange) => {
+      Object.values(seatingTypes).forEach((seating) => {
+        Object.values(pointsTypes).forEach((points) => {
+          restId += 1;
+          partyRange.forEach((party) => {
+            dateTimeRange.forEach((availAt) => {
+              quantityRange.forEach((quantity) => {
+                inventoryData.push([restId, party, format(availAt), seating, points, quantity]);
+              });
             });
           });
         });
@@ -72,10 +96,12 @@ _.range(1, restaurantNum + 1).forEach((rest_id) => {
 // booked_at can be way before when the inventory is available
 const reservationsData = [];
 
-_.range(1, inventoryData + 1, 10).forEach((invId) => {
-  const bookedAt = firstDateTime - (1 + Math.random()) * (30 * 24 * 60 * 60 * 1000);
-  reservationsData.push([123, invId, bookedAt]);
+_.range(1, inventoryData.length + 1, 10).forEach((invId) => {
+  const bookedAt = new Date(firstDateTime - (1 + Math.random()) * (30 * 24 * 60 * 60 * 1000));
+  reservationsData.push([123, invId, format(bookedAt)]);
 });
+
+console.log(inventoryData.length);
 
 exports.inventoryData = inventoryData;
 exports.reservationsData = reservationsData;
