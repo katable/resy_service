@@ -65,7 +65,7 @@ const pointsTypes = {
 };
 
 // [id] restaurant_id, party, avail_at, special_seating, points, quantity
-const inventoryData = [];
+const availableTimeslots = [];
 
 let restId = 0;
 Object.values(partyTypes).forEach((partyRange) => {
@@ -77,7 +77,7 @@ Object.values(partyTypes).forEach((partyRange) => {
           partyRange.forEach((party) => {
             dateTimeRange.forEach((availAt) => {
               quantityRange.forEach((quantity) => {
-                inventoryData.push([restId, party, format(availAt), seating, points, quantity]);
+                availableTimeslots.push([restId, party, format(availAt), seating, points, quantity]);
               });
             });
           });
@@ -94,12 +94,12 @@ Object.values(partyTypes).forEach((partyRange) => {
 // [id] user_id, inventory_id, booked_at
 // 1 reservation already made for every 10th inventory type
 // booked_at can be way before when the inventory is available
-const reservationsData = [];
+const reservedTimeslots = [];
 
-_.range(1, inventoryData.length + 1, 10).forEach((invId) => {
+_.range(1, availableTimeslots.length + 1, 10).forEach((invId) => {
   const bookedAt = new Date(firstDateTime - (1 + Math.random()) * (30 * 24 * 60 * 60 * 1000));
-  reservationsData.push([123, invId, format(bookedAt)]);
+  reservedTimeslots.push([123, invId, format(bookedAt)]);
 });
 
-exports.inventoryData = inventoryData;
-exports.reservationsData = reservationsData;
+exports.inventoryData = availableTimeslots;
+exports.reservationsData = reservedTimeslots;
