@@ -98,7 +98,7 @@ const reservedTimeslots = [];
 
 _.range(1, availableTimeslots.length + 1, 10).forEach((invId) => {
   const bookedAt = new Date(firstDateTime - (1 + Math.random()) * (30 * 24 * 60 * 60 * 1000));
-  reservationsData.push([123, invId, format(bookedAt)]);
+  reservedTimeslots.push([123, invId, format(bookedAt)]);
 });
 
 exports.inventoryData = inventoryData;
