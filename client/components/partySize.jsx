@@ -8,7 +8,7 @@ const PartySize = ({ partySize, handleChangeParty }) => (
   <div>
     <div>Party Size</div>
     <div>For {partySize}</div>
-    <select onChange={handleChangeParty}>
+    <select value={partySize} onChange={handleChangeParty}>
       {_.range(1, maxPartySize + 1).map(i => <option key={`party${i}`}>{i}</option>)}
     </select>
   </div>
