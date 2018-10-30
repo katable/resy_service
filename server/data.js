@@ -102,4 +102,4 @@ _.range(1, availableTimeslots.length + 1, 10).forEach((invId) => {
 });
 
 exports.inventoryData = availableTimeslots;
-exports.reservationsData = reservationsData;
+exports.reservationsData = reservedTimeslots;
