@@ -12,16 +12,17 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // the user will have supplied some values from the home page before the restaurant page
-      partySize: '3',
-      date: new Date(),
-      time: '7:00 PM',
+      partySize: '3', // user-supplied
       stage: 'findTable',
-      availableSlots: null,
-      restaurantName: 'Boulevard',
+      availableSlots: [],
     };
 
+    // the user will have supplied some values from the home page before the restaurant page
+    this.restaurantId = 1;
+    this.restaurantName = 'Boulevard';
     this.timesBookedToday = null;
+    this.date = new Date();
+    this.time = '7:00 PM';
 
     this.handleChangeParty = this.handleChangeParty.bind(this);
     this.handleChangeDate = this.handleChangeDate.bind(this);
@@ -31,6 +32,10 @@ class App extends React.Component {
 
   componentDidMount() {
     // fetch number of times booked today
+    fetch(`/reservations/timesBookedToday?restaurant_id=${this.restaurantId}`)
+      .then((timesBookedToday) => {
+        this.timesBookedToday = timesBookedToday;
+      });
   }
 
   handleChangeParty(e) {
@@ -60,6 +65,13 @@ class App extends React.Component {
     //   if too far in advance, set availableSlots to [], stage to 'tooFarInAdvance'
     // if available: set availableSlots, stage to 'selectTime'
     // else set availableSlots to [], stage to 'notAvailable'
+    fetch(`/reservations/inventory?restaurant_id=${this.restaurantId}&date=${this.date}&time=${this.time}`)
+      .then((res) => {
+        this.setState({
+          availableSlots: res.availableSlots,
+          stage: res.stage,
+        });
+      });
   }
 
   render() {
@@ -70,9 +82,11 @@ class App extends React.Component {
         <div className="main">
           <div className="header">Make a reservation</div>
           <div className="body">
-            <PartySize partySize={partySize} handleChangeParty={this.handleChangeParty} />
-            <Calendar date={date} handleChangeDate={this.handleChangeDate} />
-            <Time time={time} handleChangeTime={this.handleChangeTime} />
+            <div className="inputs">
+              <PartySize partySize={partySize} handleChangeParty={this.handleChangeParty} />
+              <Calendar date={date} handleChangeDate={this.handleChangeDate} />
+              <Time time={time} handleChangeTime={this.handleChangeTime} />
+            </div>
             <Availability stage={stage} handleFindTable={this.handleFindTable} availableSlots={availableSlots} time={time} restaurantName={restaurantName} />
             <TimesBookedToday timesBookedToday={this.timesBookedToday} />
             <TimeslotsLeft timeslotsLeft={availableSlots.length} />

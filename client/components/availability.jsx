@@ -5,6 +5,9 @@ import Problem from './problem';
 const Availability = ({ stage, handleFindTable, availableSlots, time, restaurantName }) => {
   if (stage === 'findTable') return <div onClick={handleFindTable}>Find a Table</div>;
 
+  // Don't know what the best way to handle long strings is... if I use string concatenation,
+  // then function calls slow things down.  if I use ES6 template literals, then what about
+  // indentation?  Removing indentation also has performance impact.
   if (stage === 'partyTooLarge') return <Problem message={`Unfortunately, your party is too large to make an online reservation at ${restaurantName}. We recommend contacting the restaurant directly.`} />;
 
   if (stage === 'tooFarInAdvance') return <Problem message={`Unfortunately, ${restaurantName} doesn’t take online reservations that far in advance. Have another time in mind?`} />;
