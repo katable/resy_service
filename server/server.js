@@ -33,7 +33,7 @@ app.get('/reservations/timesBookedToday/:restaurant_id', (req, res) => {
     WHERE restaurant_id = ${req.params.restaurant_id}
     AND DATE(booked_at) = '2019-10-03'
   `, (err, result) => {
-    if (err) throw err;
+    if (err) res.send('-1');
     res.send(String(result[0].cnt));
   })
     .error(() => res.send('-1'));
