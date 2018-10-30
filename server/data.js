@@ -77,7 +77,7 @@ Object.values(partyTypes).forEach((partyRange) => {
           partyRange.forEach((party) => {
             dateTimeRange.forEach((availAt) => {
               quantityRange.forEach((quantity) => {
-                inventoryData.push([restId, party, format(availAt), seating, points, quantity]);
+                availableTimeslots.push([restId, party, format(availAt), seating, points, quantity]);
               });
             });
           });
