@@ -96,7 +96,7 @@ Object.values(partyTypes).forEach((partyRange) => {
 // booked_at can be way before when the inventory is available
 const reservedTimeslots = [];
 
-_.range(1, inventoryData.length + 1, 10).forEach((invId) => {
+_.range(1, availableTimeslots.length + 1, 10).forEach((invId) => {
   const bookedAt = new Date(firstDateTime - (1 + Math.random()) * (30 * 24 * 60 * 60 * 1000));
   reservationsData.push([123, invId, format(bookedAt)]);
 });
