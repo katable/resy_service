@@ -28,16 +28,17 @@ const timeslots = [
   '11:00 PM', '11:30 PM',
 ];
 
-const Time = ({ handleChangeTime }) => (
+const Time = ({ time, handleChangeTime }) => (
   <div>
     <div>Time</div>
-    <select onChange={handleChangeTime}>
+    <select value={time} onChange={handleChangeTime}>
       {timeslots.map(ts => <option key={ts}>{ts}</option>)}
     </select>
   </div>
 );
 
 Time.propTypes = {
+  time: PropTypes.string.isRequired,
   handleChangeTime: PropTypes.func.isRequired,
 };
 
