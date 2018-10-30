@@ -15,13 +15,13 @@ class App extends React.Component {
       partySize: '3', // user-supplied
       stage: 'findTable',
       availableSlots: [],
+      timesBookedToday: null,
     };
 
     // the user will have supplied some values from the home page before the restaurant page
     this.restaurantId = 1;
     this.restaurantName = 'Boulevard';
-    this.timesBookedToday = null;
-    this.date = new Date();
+    this.date = new Date('2019-10-2');
     this.time = '7:00 PM';
 
     this.handleChangeParty = this.handleChangeParty.bind(this);
@@ -32,9 +32,11 @@ class App extends React.Component {
 
   componentDidMount() {
     // fetch number of times booked today
-    fetch(`/reservations/timesBookedToday?restaurant_id=${this.restaurantId}`)
-      .then((timesBookedToday) => {
-        this.timesBookedToday = timesBookedToday;
+    fetch(`/reservations/timesBookedToday/${this.restaurantId}`)
+      .then(res => res.json())
+      .then((response) => {
+        const num = JSON.stringify(response);
+        if (num !== '-1') this.setState({ timesBookedToday: JSON.stringify(response) });
       });
   }
 
@@ -60,11 +62,6 @@ class App extends React.Component {
   }
 
   handleFindTable() {
-    // fetch availability based on specified party size, date, time
-    //   if party too large, set availableSlots to [], stage to 'partyTooLarge'
-    //   if too far in advance, set availableSlots to [], stage to 'tooFarInAdvance'
-    // if available: set availableSlots, stage to 'selectTime'
-    // else set availableSlots to [], stage to 'notAvailable'
     fetch(`/reservations/inventory?restaurant_id=${this.restaurantId}&date=${this.date}&time=${this.time}`)
       .then((res) => {
         this.setState({
@@ -75,7 +72,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { partySize, date, time, stage, availableSlots, restaurantName } = this.state;
+    const { partySize, stage, availableSlots, timesBookedToday } = this.state;
 
     return (
       <div>
@@ -84,11 +81,11 @@ class App extends React.Component {
           <div className="body">
             <div className="inputs">
               <PartySize partySize={partySize} handleChangeParty={this.handleChangeParty} />
-              <Calendar date={date} handleChangeDate={this.handleChangeDate} />
-              <Time time={time} handleChangeTime={this.handleChangeTime} />
+              <Calendar date={this.date} handleChangeDate={this.handleChangeDate} />
+              <Time time={this.time} handleChangeTime={this.handleChangeTime} />
             </div>
-            <Availability stage={stage} handleFindTable={this.handleFindTable} availableSlots={availableSlots} time={time} restaurantName={restaurantName} />
-            <TimesBookedToday timesBookedToday={this.timesBookedToday} />
+            <Availability stage={stage} handleFindTable={this.handleFindTable} availableSlots={availableSlots} time={this.time} restaurantName={this.restaurantName} />
+            <TimesBookedToday timesBookedToday={timesBookedToday} />
             <TimeslotsLeft timeslotsLeft={availableSlots.length} />
           </div>
         </div>
