@@ -101,5 +101,5 @@ _.range(1, availableTimeslots.length + 1, 10).forEach((invId) => {
   reservedTimeslots.push([123, invId, format(bookedAt)]);
 });
 
-exports.inventoryData = inventoryData;
+exports.inventoryData = availableTimeslots;
 exports.reservationsData = reservationsData;
