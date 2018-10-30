@@ -65,7 +65,7 @@ const pointsTypes = {
 };
 
 // [id] restaurant_id, party, avail_at, special_seating, points, quantity
-const inventoryData = [];
+const availableTimeslots = [];
 
 let restId = 0;
 Object.values(partyTypes).forEach((partyRange) => {
