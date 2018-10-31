@@ -85,9 +85,44 @@ exports.numStrToPrimitive = (str) => {
 
 exports.numStrToTimeAMPM = str => Hr24ToAMPM[str.slice(8)];
 
-exports.dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+exports.dayOfWeekAbbr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-exports.month = [
+exports.monthName = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December',
 ];
+
+exports.msInADay = 24 * 60 * 60 * 1000;
+
+exports.toFirstOfMonth = datePrimitive => new Date(datePrimitive.setUTCDate(1));
+
+exports.addOneMonthToFOM = (firstOfMonthPrimitive) => {
+  const temp = new Date(firstOfMonthPrimitive.valueOf() + 40 * exports.msInADay);
+  return exports.toFirstOfMonth(temp);
+};
+
+exports.minusOneMonthFromFOM = (firstOfMonthPrimitive) => {
+  const temp = new Date(firstOfMonthPrimitive - exports.msInADay);
+  return exports.toFirstOfMonth(temp);
+};
+
+exports.showWeekdayMonthSlashDay = (datePrimitive) => {
+  return exports.dayOfWeekAbbr[datePrimitive.getUTCDay()] + ', '
+    + (datePrimitive.getUTCMonth() + 1) + '/' + datePrimitive.getUTCDate();
+};
+
+exports.showMonthSlashDay = (datePrimitive) => {
+  return (datePrimitive.getUTCMonth() + 1) + '/' + datePrimitive.getUTCDate();
+};
+
+exports.showFullMonthYear = (datePrimitive) => {
+  return exports.monthName[datePrimitive.getUTCMonth()] + ' '
+    + datePrimitive.getUTCFullYear();
+};
+
+exports.getDatesToShow = (calFirstOfMonth) => {
+  const daysToOffset = calFirstOfMonth.getUTCDay();
+  const firstDay = calFirstOfMonth - daysToOffset * exports.msInADay;
+
+  return Array(42).fill(null).map((_, i) => new Date(firstDay + i * exports.msInADay));
+};

@@ -1,10 +1,10 @@
 import React from 'react';
-import { numStrToPrimitive, dayOfWeek, month } from './helper';
 import PropTypes from 'prop-types';
-
-// const Calendar = ({ dateTime, handleChangeDate }) => {
-//   let dtPrimitive = numStrToPrimitive(dateTime);
-// };
+import {
+  numStrToPrimitive, dayOfWeekAbbr, addOneMonthToFOM, minusOneMonthFromFOM,
+  showWeekdayMonthSlashDay, showFullMonthYear, showMonthSlashDay,
+  toFirstOfMonth, getDatesToShow,
+} from './helper';
 
 class Calendar extends React.Component {
   constructor(props) {
@@ -14,10 +14,12 @@ class Calendar extends React.Component {
     this.state = {
       showCalendar: false,
       selectedDate: numStrToPrimitive(dateTime),
-      calendarDate: new Date(numStrToPrimitive(dateTime).setUTCDate(1)),
+      calFirstOfMonth: toFirstOfMonth(numStrToPrimitive(dateTime)),
     };
 
     this.toggleCalendar = this.toggleCalendar.bind(this);
+    this.handlePrevMonth = this.handlePrevMonth.bind(this);
+    this.handleNextMonth = this.handleNextMonth.bind(this);
   }
 
   toggleCalendar() {
@@ -28,23 +30,49 @@ class Calendar extends React.Component {
     });
   }
 
+  handlePrevMonth() {
+    const { calFirstOfMonth } = this.state;
+
+    this.setState({
+      calFirstOfMonth: minusOneMonthFromFOM(calFirstOfMonth),
+    });
+  }
+
+  handleNextMonth() {
+    const { calFirstOfMonth } = this.state;
+
+    this.setState({
+      calFirstOfMonth: addOneMonthToFOM(calFirstOfMonth),
+    });
+  }
+
   // this.props.handleChangeDate
 
   render() {
-    const { showCalendar, selectedDate, calendarDate } = this.state;
-    const calMonthYear = `${month[calendarDate.getUTCMonth()]} ${calendarDate.getUTCFullYear()}`;
+    const { showCalendar, selectedDate, calFirstOfMonth } = this.state;
+    const datesToShow = getDatesToShow(calFirstOfMonth);
 
     return (
       <div>
         <div>Date</div>
         <button type="button" onClick={this.toggleCalendar}>
-          {`${dayOfWeek[selectedDate.getUTCDay()]}, ${selectedDate.getUTCMonth() + 1}/${selectedDate.getUTCDate()}`}
+          {showWeekdayMonthSlashDay(selectedDate)}
         </button>
         {
           showCalendar
           && (
             <div>
-              <div>{'prev'} {calMonthYear} {'next'}</div>
+              <div>
+                <div role="button" onClick={this.handlePrevMonth}>prev</div>
+                <div>{showFullMonthYear(calFirstOfMonth)}</div>
+                <div role="button" onClick={this.handleNextMonth}>next</div>
+              </div>
+              <div>{dayOfWeekAbbr.map(day => <div key={day}>{day}</div>)}</div>
+              <div>
+              {
+                datesToShow.map(date => <div key={showMonthSlashDay(date)}>{showMonthSlashDay(date)}</div>)
+              }
+              </div>
             </div>
           )
         }
