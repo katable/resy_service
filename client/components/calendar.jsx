@@ -6,6 +6,8 @@ import {
   toFirstOfMonth, getDatesToShow,
 } from './helper';
 
+const BasicDiv = val => (<div key={val}>{val}</div>);
+
 class Calendar extends React.Component {
   constructor(props) {
     super(props);
@@ -67,11 +69,9 @@ class Calendar extends React.Component {
                 <div>{showFullMonthYear(calFirstOfMonth)}</div>
                 <div role="button" onClick={this.handleNextMonth}>next</div>
               </div>
-              <div>{dayOfWeekAbbr.map(day => <div key={day}>{day}</div>)}</div>
+              <div>{dayOfWeekAbbr.map(day => BasicDiv(day))}</div>
               <div>
-              {
-                datesToShow.map(date => <div key={showMonthSlashDay(date)}>{showMonthSlashDay(date)}</div>)
-              }
+                {datesToShow.map(date => BasicDiv(showMonthSlashDay(date)))}
               </div>
             </div>
           )
