@@ -7,22 +7,24 @@ import Availability from './components/availability';
 import TimesBookedToday from './components/timesBookedToday';
 import TimeslotsLeft from './components/timeslotsLeft';
 import SaveThisRestaurant from './components/saveThisRestaurant';
+import { removeHyphen, mapTo24Hr } from './components/helper';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      partySize: '3', // user-supplied
+      partySize: '2', // user-supplied
       stage: 'findTable',
       availableSlots: [],
       timesBookedToday: null,
     };
 
     // the user will have supplied some values from the home page before the restaurant page
-    this.restaurantId = 1;
+    this.restId = 1;
     this.restaurantName = 'Boulevard';
-    this.date = new Date('2019-10-2');
-    this.time = '7:00 PM';
+    const date = '2020-03-27';
+    const time = '9:00 PM';
+    this.dateTime = removeHyphen(date) + mapTo24Hr(time);
 
     this.handleChangeParty = this.handleChangeParty.bind(this);
     this.handleChangeDate = this.handleChangeDate.bind(this);
@@ -32,11 +34,10 @@ class App extends React.Component {
 
   componentDidMount() {
     // fetch number of times booked today
-    fetch(`/reservations/timesBookedToday/${this.restaurantId}`)
+    fetch(`/reservations/timesBookedToday/${this.restId}`)
       .then(res => res.json())
       .then((response) => {
-        const num = JSON.stringify(response);
-        if (num !== '-1') this.setState({ timesBookedToday: JSON.stringify(response) });
+        if (response !== '-1') this.setState({ timesBookedToday: response });
       });
   }
 
@@ -62,12 +63,12 @@ class App extends React.Component {
   }
 
   handleFindTable() {
-    fetch(`/reservations/inventory?restaurant_id=${this.restaurantId}&date=${this.date}&time=${this.time}`)
-      .then((res) => {
-        this.setState({
-          availableSlots: res.availableSlots,
-          stage: res.stage,
-        });
+    const { partySize } = this.state;
+
+    fetch(`/reservations/inventory?restaurantId=${this.restId}&dateTime=${this.dateTime}&party=${partySize}`)
+      .then(res => res.json())
+      .then(({ stage, availableSlots }) => {
+        this.setState({ stage, availableSlots });
       });
   }
 
@@ -81,10 +82,10 @@ class App extends React.Component {
           <div className="body">
             <div className="inputs">
               <PartySize partySize={partySize} handleChangeParty={this.handleChangeParty} />
-              <Calendar date={this.date} handleChangeDate={this.handleChangeDate} />
-              <Time time={this.time} handleChangeTime={this.handleChangeTime} />
+              <Calendar dateTime={this.dateTime} handleChangeDate={this.handleChangeDate} />
+              <Time dateTime={this.dateTime} handleChangeTime={this.handleChangeTime} />
             </div>
-            <Availability stage={stage} handleFindTable={this.handleFindTable} availableSlots={availableSlots} time={this.time} restaurantName={this.restaurantName} />
+            <Availability stage={stage} handleFindTable={this.handleFindTable} availableSlots={availableSlots} dateTime={this.dateTime} restaurantName={this.restaurantName} />
             <TimesBookedToday timesBookedToday={timesBookedToday} />
             <TimeslotsLeft timeslotsLeft={availableSlots.length} />
           </div>

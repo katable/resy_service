@@ -1,15 +1,7 @@
 const _ = require('underscore');
+const helper = require('../client/components/helper');
 
-// 'YYYY-MM-DD HH:mm:ss' for MySQL insertion (extra quotes yes, 0 padding not needed)
-const format = (dateTime) => {
-  const y = dateTime.getFullYear();
-  const mon = dateTime.getMonth() + 1;
-  const d = dateTime.getDate();
-  const h = dateTime.getHours();
-  const min = dateTime.getMinutes();
-  const s = dateTime.getSeconds();
-  return `"${y}-${mon}-${d} ${h}:${min}:${s}"`;
-};
+const { primitiveToSQL } = helper;
 
 /*
  *  Generate data for the "inventory" table
@@ -22,7 +14,7 @@ const partyTypes = {
   scattered: [1, 10],
 };
 
-// 2019-12-01 00:00:00 to 2020-03-31 23:30:00 in 30-min increments
+// UTC 2019-12-01 00:00:00 to 2020-03-31 23:30:00 in 30-min increments
 // values in milliseconds from 1970-01-01 00:00:00
 const firstDateTime = (2020 - 1970) * 365.25 * 24 * 60 * 60 * 1000
                       - 31.5 * 24 * 60 * 60 * 1000;
@@ -36,14 +28,14 @@ const allTimeSlots = _.range(firstDateTime, lastDateTime, increment30Mins)
 
 const dateTimeTypes = {
   most: allTimeSlots.filter(dt =>
-    [5, 6].includes(dt.getDay()) &&
-    ((dt.getHours() >= 20 && dt.getHours() <= 22) ||
-     (dt.getHours() >= 11 && dt.getHours() <= 13))
+    [5, 6].includes(dt.getUTCDay()) &&
+    ((dt.getUTCHours() >= 20 && dt.getUTCHours() <= 22) ||
+     (dt.getUTCHours() >= 11 && dt.getUTCHours() <= 13))
   ),
   few: allTimeSlots.filter(dt =>
-    [1, 3].includes(dt.getDay()) &&
-    (dt.getDate() < 5 || dt.getDate() > 26) &&
-    dt.getHours() >= 18 && dt.getHours() <= 19
+    [1, 3].includes(dt.getUTCDay()) &&
+    (dt.getUTCDate() < 5 || dt.getUTCDate() > 26) &&
+    dt.getUTCHours() >= 18 && dt.getUTCHours() <= 19
   ),
 };
 
@@ -77,7 +69,7 @@ Object.values(partyTypes).forEach((partyRange) => {
           partyRange.forEach((party) => {
             dateTimeRange.forEach((availAt) => {
               quantityRange.forEach((quantity) => {
-                availableTimeslots.push([restId, party, format(availAt), seating, points, quantity]);
+                availableTimeslots.push([restId, party, primitiveToSQL(availAt), seating, points, quantity]);
               });
             });
           });
@@ -98,7 +90,7 @@ const reservedTimeslots = [];
 
 _.range(1, availableTimeslots.length + 1, 10).forEach((invId) => {
   const bookedAt = new Date(firstDateTime - (1 + Math.random()) * (30 * 24 * 60 * 60 * 1000));
-  reservedTimeslots.push([123, invId, format(bookedAt)]);
+  reservedTimeslots.push([123, invId, primitiveToSQL(bookedAt)]);
 });
 
 exports.inventoryData = availableTimeslots;

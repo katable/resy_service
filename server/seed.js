@@ -6,6 +6,7 @@ const config = require('./config');
 const conn = mysql.createConnection({
   user: config.USER,
   password: config.PASSWORD,
+  timezone: 'UTC+0',
 });
 
 const db = Promise.promisifyAll(conn, { multiArgs: true });
