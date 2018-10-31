@@ -49,18 +49,14 @@ const AMPMToHr24 = {
   '11:30 PM': '2330',
 };
 
-exports.AMPMToHr24 = AMPMToHr24;
-
 const Hr24ToAMPM = {};
 
 Object.entries(AMPMToHr24).forEach(([AMPM, Hr24]) => {
   Hr24ToAMPM[Hr24] = AMPM;
 });
 
-exports.Hr24ToAMPM = Hr24ToAMPM;
-
 // 'YYYY-MM-DD HH:mm:ss' for MySQL insertion (extra quotes yes, 0 padding not needed)
-exports.primitiveToSQL = (dateTime) => {
+const primitiveToSQL = (dateTime) => {
   const y = dateTime.getUTCFullYear();
   const mon = dateTime.getUTCMonth() + 1;
   const d = dateTime.getUTCDate();
@@ -70,11 +66,11 @@ exports.primitiveToSQL = (dateTime) => {
   return `"${y}-${mon}-${d} ${h}:${min}:${s}"`;
 };
 
-exports.removeHyphen = date => date.split('-').join('');
+const removeHyphen = date => date.split('-').join('');
 
-exports.mapTo24Hr = time => AMPMToHr24[time];
+const mapTo24Hr = time => AMPMToHr24[time];
 
-exports.numStrToPrimitive = (str) => {
+const numStrToPrimitive = (str) => {
   const y = str.slice(0, 4);
   const mon = String(Number(str.slice(4, 6)) - 1);
   const d = str.slice(6, 8);
@@ -83,46 +79,72 @@ exports.numStrToPrimitive = (str) => {
   return new Date(Date.UTC(y, mon, d, h, min, 0));
 };
 
-exports.numStrToTimeAMPM = str => Hr24ToAMPM[str.slice(8)];
+const numStrToTimeAMPM = str => Hr24ToAMPM[str.slice(8)];
 
-exports.dayOfWeekAbbr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const dayOfWeekAbbr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-exports.monthName = [
+const monthName = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December',
 ];
 
-exports.msInADay = 24 * 60 * 60 * 1000;
+const msInADay = 24 * 60 * 60 * 1000;
 
-exports.toFirstOfMonth = datePrimitive => new Date(datePrimitive.setUTCDate(1));
+const toFirstOfMonth = datePrimitive => new Date(datePrimitive.setUTCDate(1));
 
-exports.addOneMonthToFOM = (firstOfMonthPrimitive) => {
-  const temp = new Date(firstOfMonthPrimitive.valueOf() + 40 * exports.msInADay);
-  return exports.toFirstOfMonth(temp);
+const addOneMonthToFOM = (firstOfMonthPrimitive) => {
+  const temp = new Date(firstOfMonthPrimitive.valueOf() + 40 * msInADay);
+  return toFirstOfMonth(temp);
 };
 
-exports.minusOneMonthFromFOM = (firstOfMonthPrimitive) => {
-  const temp = new Date(firstOfMonthPrimitive - exports.msInADay);
-  return exports.toFirstOfMonth(temp);
+const minusOneMonthFromFOM = (firstOfMonthPrimitive) => {
+  const temp = new Date(firstOfMonthPrimitive - msInADay);
+  return toFirstOfMonth(temp);
 };
 
-exports.showWeekdayMonthSlashDay = (datePrimitive) => {
-  return exports.dayOfWeekAbbr[datePrimitive.getUTCDay()] + ', '
-    + (datePrimitive.getUTCMonth() + 1) + '/' + datePrimitive.getUTCDate();
+const showMonthSlashDay = (datePrimitive) => {
+  const month = datePrimitive.getUTCMonth() + 1;
+  const day = datePrimitive.getUTCDate();
+
+  return `${month}/${day}`;
 };
 
-exports.showMonthSlashDay = (datePrimitive) => {
-  return (datePrimitive.getUTCMonth() + 1) + '/' + datePrimitive.getUTCDate();
+const showWeekdayMonthSlashDay = (datePrimitive) => {
+  const weekday = datePrimitive.getUTCDay();
+
+  return `${dayOfWeekAbbr[weekday]}, ${showMonthSlashDay(datePrimitive)}`;
 };
 
-exports.showFullMonthYear = (datePrimitive) => {
-  return exports.monthName[datePrimitive.getUTCMonth()] + ' '
-    + datePrimitive.getUTCFullYear();
+const showFullMonthYear = (datePrimitive) => {
+  const month = datePrimitive.getUTCMonth();
+  const year = datePrimitive.getUTCFullYear();
+
+  return `${monthName[month]} ${year}`;
 };
 
-exports.getDatesToShow = (calFirstOfMonth) => {
+const getDatesToShow = (calFirstOfMonth) => {
   const daysToOffset = calFirstOfMonth.getUTCDay();
-  const firstDay = calFirstOfMonth - daysToOffset * exports.msInADay;
+  const firstDay = calFirstOfMonth - daysToOffset * msInADay;
 
-  return Array(42).fill(null).map((_, i) => new Date(firstDay + i * exports.msInADay));
+  return Array(42).fill(null).map((_, i) => new Date(firstDay + i * msInADay));
+};
+
+module.exports = {
+  AMPMToHr24,
+  Hr24ToAMPM,
+  primitiveToSQL,
+  removeHyphen,
+  mapTo24Hr,
+  numStrToPrimitive,
+  numStrToTimeAMPM,
+  dayOfWeekAbbr,
+  monthName,
+  msInADay,
+  toFirstOfMonth,
+  addOneMonthToFOM,
+  minusOneMonthFromFOM,
+  showMonthSlashDay,
+  showWeekdayMonthSlashDay,
+  showFullMonthYear,
+  getDatesToShow,
 };
