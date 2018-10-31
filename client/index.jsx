@@ -22,9 +22,8 @@ class App extends React.Component {
     // the user will have supplied some values from the home page before the restaurant page
     this.restId = 1;
     this.restaurantName = 'Boulevard';
-    const date = '2020-03-27';
-    const time = '9:00 PM';
-    this.dateTime = removeHyphen(date) + mapTo24Hr(time);
+    this.date = '2020-03-27';
+    this.time = '9:00 PM';
 
     this.handleChangeParty = this.handleChangeParty.bind(this);
     this.handleChangeDate = this.handleChangeDate.bind(this);
@@ -49,23 +48,26 @@ class App extends React.Component {
   }
 
   handleChangeDate(e) {
+    this.date = e.target.value;
+
     this.setState({
-      date: e.target.value,
       stage: 'findTable',
     });
   }
 
   handleChangeTime(e) {
+    this.time = e.target.value;
+
     this.setState({
-      time: e.target.value,
       stage: 'findTable',
     });
   }
 
   handleFindTable() {
     const { partySize } = this.state;
+    const dateTime = removeHyphen(this.date) + mapTo24Hr(this.time);
 
-    fetch(`/reservations/inventory?restaurantId=${this.restId}&dateTime=${this.dateTime}&party=${partySize}`)
+    fetch(`/reservations/inventory?restaurantId=${this.restId}&dateTime=${dateTime}&party=${partySize}`)
       .then(res => res.json())
       .then(({ stage, availableSlots }) => {
         this.setState({ stage, availableSlots });
@@ -74,6 +76,7 @@ class App extends React.Component {
 
   render() {
     const { partySize, stage, availableSlots, timesBookedToday } = this.state;
+    const dateTime = removeHyphen(this.date) + mapTo24Hr(this.time);
 
     return (
       <div>
@@ -82,10 +85,10 @@ class App extends React.Component {
           <div className="body">
             <div className="inputs">
               <PartySize partySize={partySize} handleChangeParty={this.handleChangeParty} />
-              <Calendar dateTime={this.dateTime} handleChangeDate={this.handleChangeDate} />
-              <Time dateTime={this.dateTime} handleChangeTime={this.handleChangeTime} />
+              <Calendar dateTime={dateTime} handleChangeDate={this.handleChangeDate} />
+              <Time dateTime={dateTime} handleChangeTime={this.handleChangeTime} />
             </div>
-            <Availability stage={stage} handleFindTable={this.handleFindTable} availableSlots={availableSlots} dateTime={this.dateTime} restaurantName={this.restaurantName} />
+            <Availability stage={stage} handleFindTable={this.handleFindTable} availableSlots={availableSlots} dateTime={dateTime} restaurantName={this.restaurantName} />
             <TimesBookedToday timesBookedToday={timesBookedToday} />
             <TimeslotsLeft timeslotsLeft={availableSlots.length} />
           </div>

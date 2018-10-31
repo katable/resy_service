@@ -84,3 +84,10 @@ exports.numStrToPrimitive = (str) => {
 };
 
 exports.numStrToTimeAMPM = str => Hr24ToAMPM[str.slice(8)];
+
+exports.dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+exports.month = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
