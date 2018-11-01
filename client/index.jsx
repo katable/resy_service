@@ -79,16 +79,24 @@ class App extends React.Component {
     const dateTime = removeHyphen(this.date) + mapTo24Hr(this.time);
 
     return (
-      <div>
-        <div className="main">
-          <div className="header">Make a reservation</div>
-          <div className="body">
-            <div className="inputs">
+      <div style={{ maxWidth: '500px', textAlign: 'center' }}>
+        <div className="main" style={{ maxWidth: '500px', boxShadow: '0 2px 8px rgba(153,153,153,.4)' }}>
+          <div className="header" style={{ position: 'relative', textAlign: 'center' }}>Make a reservation</div>
+          <div className="body" style={{ textAlign: 'center' }}>
+            <div className="inputs" style={{ display: 'flex', flexDirection: 'row', maxWidth: '500px' }}>
               <PartySize partySize={partySize} handleChangeParty={this.handleChangeParty} />
-              <Calendar dateTime={dateTime} handleChangeDate={this.handleChangeDate} />
-              <Time dateTime={dateTime} handleChangeTime={this.handleChangeTime} />
+              <div style={{ display: 'flex', flex: '1 100%' }}>
+                <Calendar dateTime={dateTime} handleChangeDate={this.handleChangeDate} />
+                <Time dateTime={dateTime} handleChangeTime={this.handleChangeTime} />
+              </div>
             </div>
-            <Availability stage={stage} handleFindTable={this.handleFindTable} availableSlots={availableSlots} dateTime={dateTime} restaurantName={this.restaurantName} />
+            <Availability
+              stage={stage}
+              handleFindTable={this.handleFindTable}
+              availableSlots={availableSlots}
+              dateTime={dateTime}
+              restaurantName={this.restaurantName}
+            />
             <TimesBookedToday timesBookedToday={timesBookedToday} />
             <TimeslotsLeft timeslotsLeft={availableSlots.length} />
           </div>
