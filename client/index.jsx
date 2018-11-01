@@ -79,11 +79,13 @@ class App extends React.Component {
     const dateTime = removeHyphen(this.date) + mapTo24Hr(this.time);
 
     return (
-      <div style={{ maxWidth: '500px', textAlign: 'center' }}>
+      <div style={{ maxWidth: '500px', textAlign: 'center', fontFamily: 'Josefin Sans, sans-serif', fontSize: '14px' }}>
         <div className="main" style={{ maxWidth: '500px', boxShadow: '0 2px 8px rgba(153,153,153,.4)' }}>
-          <div className="header" style={{ position: 'relative', textAlign: 'center' }}>Make a reservation</div>
+          <h3 style={{ height: '48px', justifyContent: 'center', margin: 0, display: 'flex', flexDirection: 'column', borderBottom: '1px solid #d8d9db' }}>
+            <div className="header" style={{ position: 'relative', fontSize: '21px', fontWeight: 700, lineHeight: '24px' }}>Make a reservation</div>
+          </h3>
           <div className="body" style={{ textAlign: 'center' }}>
-            <div className="inputs" style={{ display: 'flex', flexDirection: 'row', maxWidth: '500px' }}>
+            <div className="inputs" style={{ display: 'flex', flexDirection: 'row', maxWidth: '500px', paddingTop: '1rem' }}>
               <PartySize partySize={partySize} handleChangeParty={this.handleChangeParty} />
               <div style={{ display: 'flex', flex: '1 100%' }}>
                 <Calendar dateTime={dateTime} handleChangeDate={this.handleChangeDate} />

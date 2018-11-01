@@ -4,7 +4,10 @@ import Problem from './problem';
 import { numStrToPrimitive, Hr24ToAMPM } from './helper';
 
 const Availability = ({ stage, handleFindTable, availableSlots, dateTime, restaurantName }) => {
-  if (stage === 'findTable') return <button type="button" onClick={handleFindTable} style={{ backgroundColor: '#da3743', color: '#fff' }}>Find a Table</button>;
+  if (stage === 'findTable') return (
+    <button type="button" onClick={handleFindTable} style={{ backgroundColor: '#da3743', color: '#fff', border: 'none' }}>Find a Table
+    </button>
+  );
 
   // Don't know what the best way to handle long strings is... if I use string concatenation,
   // then function calls slow things down.  if I use ES6 template literals, then what about
@@ -30,8 +33,11 @@ const Availability = ({ stage, handleFindTable, availableSlots, dateTime, restau
 
   // remove right margin for the last element
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      {displayTime.map(time => <div key={time} style={{ marginRight: '.5rem', marginBottom: '.5rem', backgroundColor: '#da3743', color: '#fff' }}>{time}</div>)}
+    <div>
+      <div>Select a time:</div>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {displayTime.map(time => <div key={time} style={{ marginRight: '.5rem', marginBottom: '.5rem', backgroundColor: '#da3743', color: '#fff' }}>{time}</div>)}
+      </div>
     </div>
   );
 };
