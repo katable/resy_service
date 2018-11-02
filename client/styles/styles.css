@@ -1,0 +1,229 @@
+#mainContainer {
+  max-width: 320px;
+  text-align: center;
+  font-family: Josefin Sans, sans-serif;
+  font-size: 14px;
+}
+
+#resyContainer {
+  max-width: 500px;
+  box-shadow: 0 2px 8px rgba(153,153,153,.4);
+}
+
+#saveRestaurantContainer {
+
+}
+
+#outerHeaderContainer {
+  padding: 0 1rem;
+}
+
+#innerHeaderContainer {
+  height: 48px;
+  justify-content: center;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #d8d9db;
+}
+
+#header {
+  position: relative;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+#bodyContainer {
+  text-align: center;
+  padding: .5rem 1rem 1rem;
+  margin-bottom: 1rem;
+}
+
+#allInputsContainer {
+  padding-top: .5rem;
+  /* display: block;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal; */
+  flex-direction: column;
+  clear: both;
+  max-height: 150px;
+  font-size: .875rem;
+}
+
+#dateTimeInputsContainer {
+  display: flex;
+  flex: 1 100%;
+  margin-top: .5rem;
+}
+
+.inputContainer, .inputTimeContainer {
+  -webkit-box-flex: 1;
+  flex: 1 50%;
+  text-align: left;
+}
+
+.inputTimeContainer {
+  margin-left: .5rem;
+}
+
+.inputLabel {
+  padding-bottom: .25rem;
+  font-weight: bold;
+}
+
+.inputFieldContainer {
+  height: 35px;
+  position: relative;
+  border-bottom: 1px solid #d8d9db;
+}
+
+.inputFieldSelected {
+  position: absolute;
+  height: calc(100% - 2px);
+  padding-top: 10px;
+}
+
+.inputFieldDropdown {
+  height: 35px;
+  width: 100%;
+  background-color: transparent;
+  color: transparent;
+  -webkit-appearance: none;
+  border: none;
+}
+
+#fullScreenBlankCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+
+#calendarOuterContainer {
+  background-color: #f1f2f4;
+  border: 1px solid #d8d9db;
+  position: absolute;
+  z-index: 2;
+  padding: 1rem 0;
+}
+
+#calendarInnerContainer {
+  display: table;
+  width: 256px;
+  margin: 0 1rem;
+}
+
+#calendarCaption {
+  display: table-caption;
+  height: 34px;
+}
+
+.roundButton {
+  position: absolute;
+  height: 32px;
+  width: 32px;
+  border: 1px solid #d8d9db;
+  border-radius: 50%;
+}
+
+#backButton {
+  left: 1rem;
+}
+
+#forwardButton {
+  right: 1rem;
+}
+
+#calendarHeader {
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 700;
+}
+
+#dayOfWeekRow {
+  display: table-row;
+  height: 34px;
+}
+
+.dayOfWeek {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.calendarCell {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 500;
+  border: 1px solid #d8d9db;
+  height: 32px;
+  width: 32px;
+}
+
+.bigButton {
+  background-color: #da3743;
+  color: #fff;
+  border: none;
+  width: 18rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: .75rem 1rem;
+  font-weight: bold;
+}
+
+.timeButton, .lastTimeButton {
+  margin-right: .5rem;
+  margin-bottom: .5rem;
+  background-color: #da3743;
+  color: #fff;
+  font-size: .8rem;
+  min-width: 72px;
+  height: 32px;
+  border-radius: 2px;
+  border: none;
+}
+
+.lastTimeButton {
+  margin-right: 0;
+}
+
+#timesBookedOuterContainer {
+  margin: 1rem 0 0;
+}
+
+#timesBookedInnerContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.timesBookedText {
+  align-self: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#saveRestaurantOuterContainer {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+#saveRestaurantButton {
+  width: 18rem;
+  padding: calc(.75rem - 1px) calc(.75rem - 1px);
+  border: 1px solid #d8d9db;
+  border-radius: 2px;
+}
+
+#saveRestaurantInnerContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.saveRestaurantText {
+  align-self: center;
+  font-size: 14px;
+}

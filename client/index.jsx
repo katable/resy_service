@@ -8,6 +8,7 @@ import TimesBookedToday from './components/timesBookedToday';
 import TimeslotsLeft from './components/timeslotsLeft';
 import SaveThisRestaurant from './components/saveThisRestaurant';
 import { removeHyphen, mapTo24Hr } from './components/helper';
+import styles from './styles/styles.css';
 
 class App extends React.Component {
   constructor(props) {
@@ -79,15 +80,17 @@ class App extends React.Component {
     const dateTime = removeHyphen(this.date) + mapTo24Hr(this.time);
 
     return (
-      <div style={{ maxWidth: '500px', textAlign: 'center', fontFamily: 'Josefin Sans, sans-serif', fontSize: '14px' }}>
-        <div className="main" style={{ maxWidth: '500px', boxShadow: '0 2px 8px rgba(153,153,153,.4)' }}>
-          <h3 style={{ height: '48px', justifyContent: 'center', margin: 0, display: 'flex', flexDirection: 'column', borderBottom: '1px solid #d8d9db' }}>
-            <div className="header" style={{ position: 'relative', fontSize: '21px', fontWeight: 700, lineHeight: '24px' }}>Make a reservation</div>
-          </h3>
-          <div className="body" style={{ textAlign: 'center' }}>
-            <div className="inputs" style={{ display: 'flex', flexDirection: 'row', maxWidth: '500px', paddingTop: '1rem' }}>
+      <div id={styles.mainContainer}>
+        <div id={styles.resyContainer}>
+          <div id={styles.outerHeaderContainer}>
+            <div id={styles.innerHeaderContainer}>
+              <div id={styles.header}>Make a reservation</div>
+            </div>
+          </div>
+          <div id={styles.bodyContainer}>
+            <div className={styles.allInputsContainer}>
               <PartySize partySize={partySize} handleChangeParty={this.handleChangeParty} />
-              <div style={{ display: 'flex', flex: '1 100%' }}>
+              <div id={styles.dateTimeInputsContainer}>
                 <Calendar dateTime={dateTime} handleChangeDate={this.handleChangeDate} />
                 <Time dateTime={dateTime} handleChangeTime={this.handleChangeTime} />
               </div>

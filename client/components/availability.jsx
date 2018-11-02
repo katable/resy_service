@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Problem from './problem';
 import { numStrToPrimitive, Hr24ToAMPM } from './helper';
+import styles from '../styles/styles.css';
 
 const Availability = ({ stage, handleFindTable, availableSlots, dateTime, restaurantName }) => {
   if (stage === 'findTable') return (
-    <button type="button" onClick={handleFindTable} style={{ backgroundColor: '#da3743', color: '#fff', border: 'none' }}>Find a Table
-    </button>
+    <div style={{ margin: '1rem auto 0' }}>
+      <button type="button" onClick={handleFindTable} className={styles.bigButton}>Find a Table</button>
+    </div>
   );
 
   // Don't know what the best way to handle long strings is... if I use string concatenation,
@@ -31,12 +33,20 @@ const Availability = ({ stage, handleFindTable, availableSlots, dateTime, restau
     return Hr24ToAMPM[timeHr24];
   });
 
+  const displayTimeExceptLast = displayTime.slice(0, displayTime.length - 1);
+  const displayTimeLast = displayTime.slice(-1)[0];
+
   // remove right margin for the last element
   return (
-    <div>
-      <div>Select a time:</div>
+    <div style={{ margin: '1rem auto 0' }}>
+      <div style={{ margin: '0 0 .5rem' }}>
+        <div style={{ fontSize: '18px', fontWeight: 'bold' }}>Select a time:</div>
+      </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        {displayTime.map(time => <div key={time} style={{ marginRight: '.5rem', marginBottom: '.5rem', backgroundColor: '#da3743', color: '#fff' }}>{time}</div>)}
+        {displayTimeExceptLast.map(time => <button key={time} className={styles.timeButton}>{time}</button>)}
+        {
+          <button key={displayTimeLast} className={styles.lastTimeButton}>{displayTimeLast}</button>
+        }
       </div>
     </div>
   );
