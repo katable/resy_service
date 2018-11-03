@@ -6,13 +6,14 @@ import Availability from './availability';
 import TimesBookedToday from './timesBookedToday';
 import TimeslotsLeft from './timeslotsLeft';
 import SaveThisRestaurant from './saveThisRestaurant';
-import { removeHyphen, mapTo24Hr, numStrToPrimitive, Hr24ToAMPM } from './helper';
+import { removeHyphen, mapTo24Hr, numStrToPrimitive, Hr24ToAMPM, strippedDateTime } from './helper';
 import styles from '../styles/styles.css';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      dateTime: '2020-03-27 9:00 PM',
       partySize: '2', // user-supplied
       stage: 'findTable',
       displayedSlots: [],
@@ -22,8 +23,6 @@ class App extends React.Component {
     // the user will have supplied some values from the home page before the restaurant page
     this.restId = 1;
     this.restaurantName = 'Alinea';
-    this.date = '2020-03-27';
-    this.time = '9:00 PM';
 
     this.handleChangeParty = this.handleChangeParty.bind(this);
     this.handleChangeDate = this.handleChangeDate.bind(this);
@@ -48,24 +47,28 @@ class App extends React.Component {
   }
 
   handleChangeDate(e) {
-    this.date = e.target.value;
+    const { dateTime } = this.state;
+    const time = dateTime.slice(dateTime.indexOf(' ') + 1);
 
     this.setState({
+      dateTime: `${e.target.id.split(' ')[0]} ${time}`,
       stage: 'findTable',
     });
   }
 
   handleChangeTime(e) {
-    this.time = e.target.value;
+    const { dateTime } = this.state;
+    const date = dateTime.slice(0, dateTime.indexOf(' '));
 
     this.setState({
+      time: `${date} ${e.target.value}`,
       stage: 'findTable',
     });
   }
 
   handleFindTable() {
-    const { partySize } = this.state;
-    const dateTime = removeHyphen(this.date) + mapTo24Hr(this.time);
+    let { dateTime, partySize } = this.state;
+    dateTime = strippedDateTime(dateTime);
 
     fetch(`/reservations/inventory?restaurantId=${this.restId}&dateTime=${dateTime}&party=${partySize}`)
       .then(res => res.json())
@@ -87,8 +90,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { partySize, stage, displayedSlots, timesBookedToday } = this.state;
-    const dateTime = removeHyphen(this.date) + mapTo24Hr(this.time);
+    let { dateTime, partySize, stage, displayedSlots, timesBookedToday } = this.state;
+    const time = dateTime.slice(dateTime.indexOf(' ') + 1);
+    dateTime = strippedDateTime(dateTime);
 
     return (
       <div id={styles.mainContainer}>
@@ -110,7 +114,7 @@ class App extends React.Component {
               stage={stage}
               handleFindTable={this.handleFindTable}
               displayedSlots={displayedSlots}
-              time={this.time}
+              time={time}
               restaurantName={this.restaurantName}
             />
             <TimesBookedToday timesBookedToday={timesBookedToday} />

@@ -4,7 +4,7 @@ import _ from 'underscore';
 import {
   numStrToPrimitive, dayOfWeekAbbr, addOneMonthToFOM, minusOneMonthFromFOM,
   showWeekdayMonthSlashDay, showFullMonthYear,
-  toFirstOfMonth, getDatesToShow, msInADay,
+  toFirstOfMonth, getDatesToShow, msInADay, primitiveToDisplay
 } from './helper';
 import styles from '../styles/styles.css';
 import svg from '../styles/svg';
@@ -16,7 +16,6 @@ class Calendar extends React.Component {
 
     this.state = {
       showCalendar: false,
-      selectedDate: numStrToPrimitive(dateTime),
       calFirstOfMonth: toFirstOfMonth(numStrToPrimitive(dateTime)),
     };
 
@@ -27,9 +26,11 @@ class Calendar extends React.Component {
 
   toggleCalendar() {
     const { showCalendar } = this.state;
+    const { dateTime } = this.props;
 
     this.setState({
       showCalendar: !showCalendar,
+      calFirstOfMonth: toFirstOfMonth(numStrToPrimitive(dateTime)),
     });
   }
 
@@ -49,10 +50,10 @@ class Calendar extends React.Component {
     });
   }
 
-  // this.props.handleChangeDate
-
   render() {
-    const { showCalendar, selectedDate, calFirstOfMonth } = this.state;
+    const { showCalendar, calFirstOfMonth } = this.state;
+    const { dateTime, handleChangeDate } = this.props;
+    const selectedDate = numStrToPrimitive(dateTime);
     const datesToShow = getDatesToShow(calFirstOfMonth);
     const today = new Date();
     const prevMonthDisabled = showFullMonthYear(today) === showFullMonthYear(calFirstOfMonth);
@@ -89,15 +90,19 @@ class Calendar extends React.Component {
                   <div style={{ display: 'table-row-group' }}>
                     {_.range(6).map(i => (
                       <div key={`row${i}`} style={{ display: 'table-row' }}>
-                        {datesToShow.slice(i * 7, (i + 1) * 7).map(date => (
-                          <div
+                        {datesToShow.slice(i * 7, (i + 1) * 7).map((date) => {
+                          const classIsInCurrentMonth = date.getUTCMonth() === calFirstOfMonth.getUTCMonth() ? styles.isInCurrentMonth : '';
+                          const classIsDisabled = today - msInADay >= date ? styles.disabled : '';
+                          const classIsSelected = Number(date) === Number(selectedDate) ? styles.selectedDate : '';
+
+                          return (<div
                             key={date}
-                            className={
-                              `${styles.calendarCell} ${date.getUTCMonth() === calFirstOfMonth.getUTCMonth() ? styles.isInCurrentMonth : ''} ${today - msInADay >= date ? styles.disabled : ''}`
-                            }
+                            id={primitiveToDisplay(date)}
+                            className={`${styles.calendarCell} ${classIsInCurrentMonth} ${classIsDisabled} ${classIsSelected}`}
                             disabled={today - msInADay >= date}
-                          >{date.getUTCDate()}</div>
-                        ))}
+                            onClick={(e) => {handleChangeDate(e); this.toggleCalendar()}}
+                          >{date.getUTCDate()}</div>);
+                          })}
                       </div>
                     ))}
                   </div>

@@ -10,10 +10,6 @@
   box-shadow: 0 2px 8px rgba(153,153,153,.4);
 }
 
-#saveRestaurantContainer {
-
-}
-
 #outerHeaderContainer {
   padding: 0 1rem;
 }
@@ -176,7 +172,7 @@
   width: 32px;
 }
 
-.calendarCell:hover {
+.calendarCell:hover, .selectedDate, #saveRestaurantButton:hover {
   border-color: #da3743;
   border-width: medium;
 }
@@ -242,6 +238,7 @@
   padding: calc(.75rem - 1px) calc(.75rem - 1px);
   border: 1px solid #d8d9db;
   border-radius: 2px;
+  box-sizing: border-box;
 }
 
 #saveRestaurantInnerContainer {

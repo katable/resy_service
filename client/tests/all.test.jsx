@@ -1,20 +1,6 @@
 import React from 'react';
-// import ReactDOM from 'react-dom';
 import App from '../components/app';
-// import renderer from 'react-test-renderer';
-// import toJson from 'enzyme-to-json';
-
 import { shallow } from 'enzyme';
-import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from 'constants';
-
-const mockFetch = (data) => {
-  return jest.fn().mockImplementation(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => data
-    })
-  );
-};
 
 /*
 
@@ -62,65 +48,3 @@ describe('App', () => {
   });
 
 });
-
-/*
-await page.select('select:first-of-type', '10');
-
-const elem = await page.$('.klyDIVfrEth1J2Z99h3Mk');
-const text = await page.evaluate(elem => elem.textContent, elem);
-expect(text).toEqual('For 10');
-*/
-
-// describe('Google', () => {
-//   beforeAll(async () => {
-//     await page.goto('https://google.com');
-//   });
-
-//   it('should display "google" text on page', async () => {
-//     console.log(page.title())
-//     await expect(page).toMatch('google');
-//   });
-// });
-
-// describe('Component: App', () => {
-//   // const items = ['Learn react', 'rest', 'go out'];
-//   window.fetch = mockFetch('2');
-
-//   it('should pass', () => {
-//     const wrapper = shallow(<App />);
-//     const partySizeState = wrapper.state().partySize;
-
-//     expect(partySizeState).toEqual('2');
-//   });
-
-  // it('should match its empty snapshot', () => {
-  //   const tree = renderer.create(
-  //     <App />
-  //   ).toJSON();
-
-  //   expect(tree).toMatchSnapshot();
-  // });
-
-  // it('should add an item based on the value in the state', () => {
-  // 	const component = shallow(<App />);
-  //   const preventDefault = jest.fn();
-  //   component.setState({
-  //     items
-  //   });
-  //   component.find('form').simulate('submit', { preventDefault });
-  // 	expect(toJson(component)).toMatchSnapshot();
-  //   expect(preventDefault).toBeCalled();
-  // });
-
-  // it('should pass a selected value to the onChange function', () => {
-  //   const tree = renderer.create(
-  //     <App />
-  //   );
-  //   const component = shallow(<App items={items} />);
-  //   component.find('input').simulate('change', { target: {
-  //     value: 'Change function' }
-  //   });
-
-  //   expect(toJson(component)).toMatchSnapshot();
-  // });
-//});

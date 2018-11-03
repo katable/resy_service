@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 const Problem = ({ message }) => (
   <div>
-    <div>
+    {/* <div>
       <svg></svg>
-    </div>
-    <div>{message}</div>
+    </div> */}
+    <div>! {message}</div>
   </div>
 );
 

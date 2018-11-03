@@ -66,6 +66,16 @@ const primitiveToSQL = (dateTime) => {
   return `"${y}-${mon}-${d} ${h}:${min}:${s}"`;
 };
 
+const primitiveToDisplay = (dateTime) => {
+  const y = dateTime.getUTCFullYear();
+  const mon = `${dateTime.getUTCMonth() + 1}`.padStart(2, '0');
+  const d = `${dateTime.getUTCDate()}`.padStart(2, '0');
+  const h12 = dateTime.getUTCHours() % 12;
+  const min = `${dateTime.getUTCMinutes()}`.padStart(2, '0');
+  const ampm = dateTime.getUTCHours() >= 12 ? 'PM' : 'AM';
+  return `${y}-${mon}-${d} ${h12}:${min}${ampm}`;
+};
+
 const removeHyphen = date => date.split('-').join('');
 
 const mapTo24Hr = time => AMPMToHr24[time];
@@ -129,10 +139,17 @@ const getDatesToShow = (calFirstOfMonth) => {
   return Array(42).fill(null).map((_, i) => new Date(firstDay + i * msInADay));
 };
 
+const strippedDateTime = (dateTime) => {
+  const date = dateTime.slice(0, dateTime.indexOf(' '));
+  const time = dateTime.slice(dateTime.indexOf(' ') + 1);
+  return removeHyphen(date) + mapTo24Hr(time);
+};
+
 module.exports = {
   AMPMToHr24,
   Hr24ToAMPM,
   primitiveToSQL,
+  primitiveToDisplay,
   removeHyphen,
   mapTo24Hr,
   numStrToPrimitive,
@@ -147,4 +164,5 @@ module.exports = {
   showWeekdayMonthSlashDay,
   showFullMonthYear,
   getDatesToShow,
+  strippedDateTime,
 };
