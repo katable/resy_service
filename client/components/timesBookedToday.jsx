@@ -8,7 +8,7 @@ const TimesBookedToday = ({ timesBookedToday }) => {
       <div id={styles.timesBookedOuterContainer}>
         <div id={styles.timesBookedInnerContainer}>
           {svg.trending}
-          <div className={styles.timesBookedText}>{`Booked ${timesBookedToday} times today`}</div>
+          <div className={`${styles.timesBookedText} test-timesBooked-text`}>{`Booked ${timesBookedToday} times today`}</div>
         </div>
       </div>
     );

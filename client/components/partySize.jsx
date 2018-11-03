@@ -10,9 +10,9 @@ const PartySize = ({ partySize, handleChangeParty }) => (
   <div className={styles.inputContainer}>
     <div className={styles.inputLabel}>Party Size</div>
     <div className={styles.inputFieldContainer}>
-      <div className={styles.inputFieldSelected}>For {partySize}</div>
+      <div className={`${styles.inputFieldSelected} test-partySize-text`}>For {partySize}</div>
       {svg.downCaret}
-      <select value={partySize} onChange={handleChangeParty} className={styles.inputFieldDropdown}>
+      <select value={partySize} onChange={handleChangeParty} className={`${styles.inputFieldDropdown} test-partySize-select`}>
         {_.range(1, maxPartySize + 1).map(i => <option key={`party${i}`}>{i}</option>)}
       </select>
     </div>
@@ -25,6 +25,11 @@ PartySize.propTypes = {
 };
 
 export default PartySize;
+
+/*
+<div className={[styles.inputFieldSelected, 'test-partySize-text']}>For {partySize}</div>
+<select value={partySize} onChange={handleChangeParty} className={[styles.inputFieldDropdown, 'test-partySize-select']}>
+*/
 
 
 /*

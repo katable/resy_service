@@ -4,7 +4,7 @@ import _ from 'underscore';
 import {
   numStrToPrimitive, dayOfWeekAbbr, addOneMonthToFOM, minusOneMonthFromFOM,
   showWeekdayMonthSlashDay, showFullMonthYear,
-  toFirstOfMonth, getDatesToShow,
+  toFirstOfMonth, getDatesToShow, msInADay,
 } from './helper';
 import styles from '../styles/styles.css';
 import svg from '../styles/svg';
@@ -54,12 +54,14 @@ class Calendar extends React.Component {
   render() {
     const { showCalendar, selectedDate, calFirstOfMonth } = this.state;
     const datesToShow = getDatesToShow(calFirstOfMonth);
+    const today = new Date();
+    const prevMonthDisabled = showFullMonthYear(today) === showFullMonthYear(calFirstOfMonth);
 
     return (
       <div className={styles.inputContainer}>
         <div className={styles.inputLabel}>Date</div>
-        <div role="button" onClick={this.toggleCalendar} className={styles.inputFieldContainer}>
-          <div className={styles.inputFieldSelected}>{showWeekdayMonthSlashDay(selectedDate)}</div>
+        <div role="button" onClick={this.toggleCalendar} className={`${styles.inputFieldContainer} test-date-button`}>
+          <div className={`${styles.inputFieldSelected} test-date-text`}>{showWeekdayMonthSlashDay(selectedDate)}</div>
           {svg.downCaret}
         </div>
         {
@@ -71,8 +73,13 @@ class Calendar extends React.Component {
                 <div id={styles.calendarInnerContainer}>
                   <div id={styles.calendarCaption}>
                     <div>
-                      <div role="button" onClick={this.handlePrevMonth} className={styles.roundButton} id={styles.backButton}>{'<'}</div>
-                      <div role="button" onClick={this.handleNextMonth} className={styles.roundButton} id={styles.forwardButton}>{'>'}</div>
+                      <button
+                        disabled={prevMonthDisabled}
+                        onClick={this.handlePrevMonth}
+                        className={`${styles.roundButton} ${prevMonthDisabled ? styles.disabled : ''}`}
+                        id={styles.backButton}
+                      >{'<'}</button>
+                      <button onClick={this.handleNextMonth} className={styles.roundButton} id={styles.forwardButton}>{'>'}</button>
                     </div>
                     <div id={styles.calendarHeader}>{showFullMonthYear(calFirstOfMonth)}</div>
                   </div>
@@ -83,7 +90,13 @@ class Calendar extends React.Component {
                     {_.range(6).map(i => (
                       <div key={`row${i}`} style={{ display: 'table-row' }}>
                         {datesToShow.slice(i * 7, (i + 1) * 7).map(date => (
-                          <div key={date} className={styles.calendarCell}>{date.getUTCDate()}</div>
+                          <div
+                            key={date}
+                            className={
+                              `${styles.calendarCell} ${date.getUTCMonth() === calFirstOfMonth.getUTCMonth() ? styles.isInCurrentMonth : ''} ${today - msInADay >= date ? styles.disabled : ''}`
+                            }
+                            disabled={today - msInADay >= date}
+                          >{date.getUTCDate()}</div>
                         ))}
                       </div>
                     ))}

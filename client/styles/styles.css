@@ -2,7 +2,7 @@
   max-width: 320px;
   text-align: center;
   font-family: Josefin Sans, sans-serif;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 #resyContainer {
@@ -127,6 +127,14 @@
   width: 32px;
   border: 1px solid #d8d9db;
   border-radius: 50%;
+  background-color: #f1f2f4;
+  text-align: center;
+  font-weight: bold;
+}
+
+.roundButton:hover {
+  border-color: #da3743;
+  border-width: medium;
 }
 
 #backButton {
@@ -138,9 +146,10 @@
 }
 
 #calendarHeader {
+  padding-top: 12px;
   text-align: center;
-  vertical-align: middle;
   font-weight: 700;
+  font-size: 16px;
 }
 
 #dayOfWeekRow {
@@ -152,16 +161,32 @@
   display: table-cell;
   text-align: center;
   vertical-align: middle;
+  font-size: 15px;
 }
 
 .calendarCell {
   display: table-cell;
+  box-sizing: border-box;
   text-align: center;
   vertical-align: middle;
+  font-size: 17px;
   font-weight: 500;
   border: 1px solid #d8d9db;
   height: 32px;
   width: 32px;
+}
+
+.calendarCell:hover {
+  border-color: #da3743;
+  border-width: medium;
+}
+
+.isInCurrentMonth {
+  background-color: white;
+}
+
+#bigButtonContainer {
+  margin: 1rem auto 0;
 }
 
 .bigButton {
@@ -176,6 +201,7 @@
 }
 
 .timeButton, .lastTimeButton {
+  display: inline-block;
   margin-right: .5rem;
   margin-bottom: .5rem;
   background-color: #da3743;
@@ -197,12 +223,12 @@
 
 #timesBookedInnerContainer {
   display: flex;
-  justify-content: center;
+  justify-content: left;
 }
 
 .timesBookedText {
   align-self: center;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
 }
 
@@ -225,5 +251,43 @@
 
 .saveRestaurantText {
   align-self: center;
-  font-size: 14px;
+  font-size: 13px;
+}
+
+#selectTimeOuterContainer {
+  margin: 1rem auto 0;
+}
+
+#selectTimeLabelContainer {
+  margin: 0 0 .5rem;
+}
+
+#selectTimeLabel {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.selectTimeSlotsContainer {
+  display: block;
+  text-align: left;
+}
+
+#timeslotsLeftContainer {
+  display: flex;
+  justify-content: left;
+}
+
+.timeslotsLeftText {
+  align-self: center;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.disabled {
+  color: #d8d9db;
+}
+
+.disabled:hover {
+  border: 1px solid #d8d9db;
 }
