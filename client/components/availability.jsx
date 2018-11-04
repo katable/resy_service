@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Problem from './problem';
+import { Hr24ToAMPM, dateTimeToTime } from './helper';
 import styles from '../styles/styles.css';
 
-const Availability = ({ stage, handleFindTable, displayedSlots, time, restaurantName }) => {
+const Availability = ({ stage, handleFindTable, displayedSlots, dateTime, restaurantName }) => {
   if (stage === 'findTable') {
     return (
       <div id={styles.bigButtonContainer}>
@@ -18,11 +19,12 @@ const Availability = ({ stage, handleFindTable, displayedSlots, time, restaurant
     if (stage === 'partyTooLarge') {
       errorMessage = 'Unfortunately, your party is too large to make an online reservation at '
         + `${restaurantName}. We recommend contacting the restaurant directly.`;
-    } else if (stage === 'partyTooLarge') {
+    } else if (stage === 'tooFarInAdvance') {
       errorMessage = `Unfortunately, ${restaurantName} doesn’t take online reservations that far`
         + ' in advance. Have another time in mind?';
     } else if (stage === 'notAvailable') {
-      errorMessage = `At the moment, there’s no online availability within 2.5 hours of ${time}.`
+      const timeAMPM = Hr24ToAMPM[dateTimeToTime(dateTime)];
+      errorMessage = `At the moment, there’s no online availability within 2.5 hours of ${timeAMPM}.`
         + ' Have another time in mind?';
     }
 
@@ -49,7 +51,7 @@ Availability.propTypes = {
   stage: PropTypes.string.isRequired,
   handleFindTable: PropTypes.func.isRequired,
   displayedSlots: PropTypes.arrayOf(PropTypes.string).isRequired,
-  time: PropTypes.string.isRequired,
+  dateTime: PropTypes.string.isRequired,
   restaurantName: PropTypes.string.isRequired,
 };
 

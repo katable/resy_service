@@ -6,14 +6,14 @@ import Availability from './availability';
 import TimesBookedToday from './timesBookedToday';
 import TimeslotsLeft from './timeslotsLeft';
 import SaveThisRestaurant from './saveThisRestaurant';
-import { removeHyphen, mapTo24Hr, numStrToPrimitive, Hr24ToAMPM, strippedDateTime } from './helper';
+import { numStrToPrimitive, Hr24ToAMPM, AMPMToHr24, dateTimeToDate, dateTimeToTime } from './helper';
 import styles from '../styles/styles.css';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dateTime: '2020-03-27 9:00 PM',
+      dateTime: '202003272100', // yyyymmddhhmm
       partySize: '2', // user-supplied
       stage: 'findTable',
       displayedSlots: [],
@@ -48,27 +48,24 @@ class App extends React.Component {
 
   handleChangeDate(e) {
     const { dateTime } = this.state;
-    const time = dateTime.slice(dateTime.indexOf(' ') + 1);
 
     this.setState({
-      dateTime: `${e.target.id.split(' ')[0]} ${time}`,
+      dateTime: `${e.target.id}${dateTimeToTime(dateTime)}`,
       stage: 'findTable',
     });
   }
 
   handleChangeTime(e) {
     const { dateTime } = this.state;
-    const date = dateTime.slice(0, dateTime.indexOf(' '));
 
     this.setState({
-      time: `${date} ${e.target.value}`,
+      dateTime: `${dateTimeToDate(dateTime)}${AMPMToHr24[e.target.value]}`,
       stage: 'findTable',
     });
   }
 
   handleFindTable() {
-    let { dateTime, partySize } = this.state;
-    dateTime = strippedDateTime(dateTime);
+    const { dateTime, partySize } = this.state;
 
     fetch(`/reservations/inventory?restaurantId=${this.restId}&dateTime=${dateTime}&party=${partySize}`)
       .then(res => res.json())
@@ -90,9 +87,7 @@ class App extends React.Component {
   }
 
   render() {
-    let { dateTime, partySize, stage, displayedSlots, timesBookedToday } = this.state;
-    const time = dateTime.slice(dateTime.indexOf(' ') + 1);
-    dateTime = strippedDateTime(dateTime);
+    const { dateTime, partySize, stage, displayedSlots, timesBookedToday } = this.state;
 
     return (
       <div id={styles.mainContainer}>
@@ -114,7 +109,7 @@ class App extends React.Component {
               stage={stage}
               handleFindTable={this.handleFindTable}
               displayedSlots={displayedSlots}
-              time={time}
+              dateTime={dateTime}
               restaurantName={this.restaurantName}
             />
             <TimesBookedToday timesBookedToday={timesBookedToday} />
