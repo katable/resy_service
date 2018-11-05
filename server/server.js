@@ -65,7 +65,7 @@ app.get('/reservations/inventory', (req, res) => {
       SELECT *
       FROM inventory
       WHERE restaurant_id = ${restaurantId}
-      AND avail_at <= ${primitiveToSQL(requestedDateTime)}
+      AND avail_at >= ${primitiveToSQL(requestedDateTime)}
       LIMIT 1
     `);
   }).then((result) => {

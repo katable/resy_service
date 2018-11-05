@@ -288,3 +288,7 @@
 .disabled:hover {
   border: 1px solid #d8d9db;
 }
+
+.inputFieldDropdown:focus, #saveRestaurantButton:focus, .bigButton:focus, .timeButton:focus, .lastTimeButton:focus, .roundButton {
+  outline: none;
+}

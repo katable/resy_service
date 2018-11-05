@@ -12,7 +12,10 @@ const Time = ({ dateTime, handleChangeTime }) => (
     <div className={styles.inputFieldContainer}>
       <div className={`${styles.inputFieldSelected} test-time-text`}>{numStrToTimeAMPM(dateTime)}</div>
       {svg.downCaret}
-      <select value={numStrToTimeAMPM(dateTime)} onChange={handleChangeTime} className={`${styles.inputFieldDropdown} test-time-select`}>
+      <select
+        value={numStrToTimeAMPM(dateTime)}
+        onChange={handleChangeTime}
+        className={`${styles.inputFieldDropdown} test-time-select`}>
         {timeslots.map(ts => <option key={ts}>{ts}</option>)}
       </select>
     </div>

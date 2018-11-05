@@ -4,7 +4,7 @@ import _ from 'underscore';
 import {
   numStrToPrimitive, dayOfWeekAbbr, addOneMonthToFOM, minusOneMonthFromFOM,
   showWeekdayMonthSlashDay, showFullMonthYear,
-  toFirstOfMonth, getDatesToShow, msInADay, primitiveToDisplay
+  toFirstOfMonth, getDatesToShow, msInADay, primitiveToDate,
 } from './helper';
 import styles from '../styles/styles.css';
 import svg from '../styles/svg';
@@ -69,7 +69,7 @@ class Calendar extends React.Component {
           showCalendar
           && (
             <div>
-              <div onClick={this.toggleCalendar} id={styles.fullScreenBlankCanvas}></div>
+              <div onClick={this.toggleCalendar} id={styles.fullScreenBlankCanvas} />
               <div id={styles.calendarOuterContainer}>
                 <div id={styles.calendarInnerContainer}>
                   <div id={styles.calendarCaption}>
@@ -96,8 +96,8 @@ class Calendar extends React.Component {
                           const classIsSelected = Number(date) === Number(selectedDate) ? styles.selectedDate : '';
 
                           return (<div
-                            key={date}
-                            id={primitiveToDisplay(date)}
+                            key={primitiveToDate(date)}
+                            id={primitiveToDate(date)}
                             className={`${styles.calendarCell} ${classIsInCurrentMonth} ${classIsDisabled} ${classIsSelected}`}
                             disabled={today - msInADay >= date}
                             onClick={(e) => {handleChangeDate(e); this.toggleCalendar()}}
@@ -121,15 +121,3 @@ Calendar.propTypes = {
 };
 
 export default Calendar;
-
-/*
-<div role="button" onClick={this.handlePrevMonth} style={{ position: 'absolute', left: '1rem', backgroundImage: `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5.24 8.07'><g><path style='fill:%23333' d='M5.09 3.68L4.39 3 1.56.15a.5.5 0 0 0-.71 0l-.7.7a.5.5 0 0 0 0 .71L2.62 4 .15 6.51a.5.5 0 0 0 0 .71l.71.71a.5.5 0 0 0 .71 0L4.39 5.1l.71-.71a.5.5 0 0 0-.01-.71z'/></g></svg>")` }}></div>
-
-
-    const svgString = encodeURIComponent(renderToStaticMarkup(<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5.24 8.07'><g><path style={{fill: '%23333'}} d='M5.09 3.68L4.39 3 1.56.15a.5.5 0 0 0-.71 0l-.7.7a.5.5 0 0 0 0 .71L2.62 4 .15 6.51a.5.5 0 0 0 0 .71l.71.71a.5.5 0 0 0 .71 0L4.39 5.1l.71-.71a.5.5 0 0 0-.01-.71z'/></g></svg>));
-    console.log(svgString);
-    const dataUri = `url("data:image/svg+xml,${svgString}")`;
-
-
-*/
-
