@@ -6,7 +6,7 @@ const mysql = require('mysql');
 const config = require('./config');
 const { primitiveToSQL, numStrToPrimitive } = require('../client/components/helper');
 
-const port = 3000;
+const port = 3002;
 
 const TEST_TODAY_DATE = '"2019-10-03"';
 

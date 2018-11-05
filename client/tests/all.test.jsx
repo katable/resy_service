@@ -24,7 +24,7 @@ Available timeslots: quantity = 4-5 for each of 8:00 PM - 10:30 PM in 30-min inc
 
 describe('App', () => {
   beforeAll(async () => {
-    await page.goto('http://127.0.0.1:3000/');
+    await page.goto('http://127.0.0.1:3002/');
   });
 
   it('should display the selected party size', async () => {
