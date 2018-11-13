@@ -16,6 +16,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 const conn = mysql.createConnection({
+  host: 'mysql.c3xdtkqpt36v.us-west-1.rds.amazonaws.com',
+  port: 3306,
   user: config.USER,
   password: config.PASSWORD,
   database: 'resy_db',

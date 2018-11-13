@@ -4,6 +4,8 @@ const data = require('./data');
 const config = require('./config');
 
 const conn = mysql.createConnection({
+  host: 'mysql.c3xdtkqpt36v.us-west-1.rds.amazonaws.com',
+  port: 3306,
   user: config.USER,
   password: config.PASSWORD,
   timezone: 'UTC+0',
@@ -12,7 +14,8 @@ const conn = mysql.createConnection({
 const db = Promise.promisifyAll(conn, { multiArgs: true });
 
 db.connectAsync()
-  .then(() => db.queryAsync('CREATE DATABASE IF NOT EXISTS resy_db'))
+  .then(() => db.queryAsync('DROP DATABASE IF EXISTS resy_db'))
+  .then(() => db.queryAsync('CREATE DATABASE resy_db'))
   .then(() => db.queryAsync('USE resy_db'))
   .then(() => db.queryAsync(`
     CREATE TABLE inventory (
